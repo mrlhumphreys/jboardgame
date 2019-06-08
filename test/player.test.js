@@ -1,9 +1,13 @@
-import fixtures from './fixtures'
+import Player from '../src/player'
 
 describe('Player', () => {
   describe('asJson', () => {
     it('must return the player as json', () => {
-      let player = fixtures('player');
+      let player = new Player({ 
+        player_number: 1,
+        name: 'aaa',
+        resigned: false
+      });
       let expected = {
         player_number: 1,
         name: 'aaa',

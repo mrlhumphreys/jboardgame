@@ -1,3 +1,3 @@
-import Match from './match';
+import { buildPlayers, buildLastAction, buildNotification, winner, asJson } from './match';
 
-export { Match };
+export { buildPlayers, buildLastAction, buildNotification, winner, asJson };

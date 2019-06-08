@@ -1,68 +1,56 @@
 import exists from './exists'
 import Player from './player'
 
-class Match {
-  constructor(args) {
-    this.id = args.id;
-    this.gameState = args.game_state;
-    this.players = args.players.map(function(p) { return new Player(p); });
-    this.lastAction = exists(args.last_action) ? args.last_action : {};
-    this.notification = exists(args.notification) ? args.notification : this._defaultMessage;
-  }
+export const buildPlayers = function(players) {
+  return players.map(function(p) { return new Player(p); }); 
+};
 
-  get asJson() {
-    return {
-      id: this.id,
-      game_state: this.gameState.asJson,
-      players: this.players.map(function(p) { return p.asJson(); }),
-      last_action: this.lastAction,
-      notification: this.notification
-    };
-  }
+export const buildLastAction = function(lastAction) {
+  return exists(lastAction) ? lastAction: {};
+};
 
-  get winner() {
-    let playerResigned = this.players.some(function(p) { return p.resigned; });
-    if (playerResigned) {
-      return this.players.filter(function(p) { return !p.resigned; })[0].playerNumber;
-    } else {
-      return this.gameState.winner;
-    }
-  }
+const findPlayerByNumber = function(match, playerNumber) {
+  return match.players.filter((p) => { return p.playerNumber === playerNumber; })[0];
+};
 
-  // private getters
-
-  _findPlayerByNumber(playerNumber) {
-    return this.players.filter((p) => { return p.playerNumber == playerNumber; })[0];
-  }
-
-  get _turnMessage() {
-    let currentPlayer = this._findPlayerByNumber(this.gameState.currentPlayerNumber);
-    return `${currentPlayer.name} to move`;
-  }
-
-  get _winnerMessage() {
-    let winningPlayer = this._findPlayerByNumber(this.winner);
-    return `${winningPlayer.name} wins`;
-  }
-
-  get _defaultMessage() {
-    if (exists(this.winner)) {
-      return this._winnerMessage;
-    } else {
-      return this._turnMessage;
-    }
-  }
-
-  // private setters
-  
-  _notify(message) {
-    this.notification = message;
-  }
-
-  _clearLastAction() {
-    this.lastAction = null;
-  }
+const turnMessage = function(match) {
+  let currentPlayer = findPlayerByNumber(match, match.gameState.currentPlayerNumber);
+  return `${currentPlayer.name} to move`;
 }
 
-export default Match
+const winnerMessage = function(match) {
+  let winningPlayer = findPlayerByNumber(match, match.winner);
+  return `${winningPlayer.name} wins`;
+};
+
+const defaultMessage = function(match) {
+  if (exists(match.winner)) {
+    return winnerMessage(match);
+  } else {
+    return turnMessage(match);
+  }
+};
+
+export const buildNotification = function(match, notification) {
+  return exists(notification) ? notification : defaultMessage(match);
+};
+
+export const winner = function(match) {
+  let playerResigned = match.players.some(function(p) { return p.resigned; });
+  if (playerResigned) {
+    return match.players.filter(function(p) { return !p.resigned; })[0].playerNumber;
+  } else {
+    return match.gameState.winner;
+  }
+};
+
+export const asJson = function(match) {
+  return {
+    id: match.id,
+    game_state: match.gameState.asJson,
+    players: match.players.map(function(p) { return p.asJson(); }),
+    last_action: match.lastAction,
+    notification: match.notification
+  };
+};
 
