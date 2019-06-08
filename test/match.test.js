@@ -15,7 +15,7 @@ describe('Match', () => {
   describe('buildLastAction', () => {
     describe('with nothing', () => {
       it('returns empty object', () => {
-        expect(buildLastAction(null)).toEqual({});
+        expect(buildLastAction(undefined)).toEqual(null);
       });
     });
 

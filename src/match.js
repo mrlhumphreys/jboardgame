@@ -6,7 +6,7 @@ export const buildPlayers = function(players) {
 };
 
 export const buildLastAction = function(lastAction) {
-  return exists(lastAction) ? lastAction: {};
+  return exists(lastAction) ? lastAction : null;
 };
 
 const findPlayerByNumber = function(match, playerNumber) {
