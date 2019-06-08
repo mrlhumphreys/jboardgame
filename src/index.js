@@ -1,3 +1,3 @@
-import Match from './match'
+import Match from './match';
 
-export default { Match }
+export { Match };
