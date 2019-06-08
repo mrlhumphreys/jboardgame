@@ -1,5 +1,4 @@
 /node_modules
-/lib
 *.swp
 *.log
 yarn-error.log
