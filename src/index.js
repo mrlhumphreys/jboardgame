@@ -1,3 +1,62 @@
-import { buildPlayers, buildLastAction, buildNotification, winner, asJson } from './match';
+import { 
+  matchAsJson,
+  buildPlayers, 
+  buildLastAction, 
+  buildNotification, 
+  winner
+} from './match';
 
-export { buildPlayers, buildLastAction, buildNotification, winner, asJson };
+import {
+  squaresAsJson,
+  findById,
+  findByCoordinate,
+  selected,
+  length,
+  map,
+  include,
+  difference,
+  first,
+  last,
+  many,
+  any,
+  empty,
+  filter,
+  occupiedByOpponentOf,
+  occupiedBy,
+  occupied,
+  unoccupied,
+  squaresAwayFrom,
+  twoSquaresAwayFrom,
+  oneSquareAwayFrom,
+  between
+} from '../src/grid'
+
+export { 
+  buildPlayers, 
+  buildLastAction, 
+  buildNotification, 
+  winner, 
+  matchAsJson,
+  squaresAsJson,
+  findById,
+  findByCoordinate,
+  selected,
+  length,
+  map,
+  include,
+  difference,
+  first,
+  last,
+  many,
+  any,
+  empty,
+  filter,
+  occupiedByOpponentOf,
+  occupiedBy,
+  occupied,
+  unoccupied,
+  squaresAwayFrom,
+  twoSquaresAwayFrom,
+  oneSquareAwayFrom,
+  between
+};

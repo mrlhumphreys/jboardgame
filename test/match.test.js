@@ -1,5 +1,5 @@
 import Player from '../src/player'
-import { buildNotification, asJson, winner, buildPlayers, buildLastAction } from '../src/match'
+import { buildNotification, matchAsJson, winner, buildPlayers, buildLastAction } from '../src/match'
 
 describe('Match', () => {
   describe('buildPlayers', () => {
@@ -58,7 +58,7 @@ describe('Match', () => {
     });
   });
 
-  describe('asJson', () => {
+  describe('matchAsJson', () => {
     it('must return the match serialized as json', () => {
       let match = {
         id: 1,
@@ -73,7 +73,7 @@ describe('Match', () => {
         notification: 'aaa to move'
       };
 
-      expect(asJson(match)).toEqual({
+      expect(matchAsJson(match)).toEqual({
         id: 1,
         game_state: {},
         players: [

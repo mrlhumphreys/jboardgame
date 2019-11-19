@@ -1,4 +1,4 @@
-import exists from './exists'
+import { exists } from './utils'
 import Player from './player'
 
 export const buildPlayers = function(players) {
@@ -44,7 +44,7 @@ export const winner = function(match) {
   }
 };
 
-export const asJson = function(match) {
+export const matchAsJson = function(match) {
   return {
     id: match.id,
     game_state: match.gameState.asJson,
