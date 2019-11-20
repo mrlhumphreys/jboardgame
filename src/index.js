@@ -29,7 +29,7 @@ import {
   twoSquaresAwayFrom,
   oneSquareAwayFrom,
   between
-} from '../src/grid'
+} from './grid'
 
 export { 
   buildPlayers, 
