@@ -26,6 +26,23 @@ class Vector {
     return this.absDx === this.absDy;
   }
 
+  get orthogonal() {
+    return this.dx === 0 || this.dy === 0;
+  }
+
+  get orthogonalOrDiagonal() {
+    return this.orthogonal || this.diagonal;
+  }
+
+  get notOrthogonalOrDiagonal() {
+    return !this.orthogonal && !this.diagonal;
+  }
+
+  get magnitude() {
+    return Math.max(this.absDx, this.absDy);
+  }
+
+  // deprecate
   get distance() {
     if (this.diagonal) {
       return this.absDx;

@@ -31,27 +31,95 @@ describe("Vector", () => {
     });
   });
 
-  describe("points on with unequal distances on x and y axes", () => {
-    it("must not be diagonal", () => {
-      let v = new Vector({x: 1, y: 3}, {x: 1, y: 1});
-      expect(v.diagonal).toBe(false);
+  describe('diagonal', () => {
+    describe('when abs dx and abs dy are equal', () => {
+      it('must return true', () => {
+        let v = new Vector({x: 3, y: 3}, {x: 4, y: 4});
+        expect(v.diagonal).toBe(true);
+      });
     });
 
-    it("must not have a distance", () => {
-      let v = new Vector({x: 1, y: 3}, {x: 1, y: 1});
-      expect(v.distance).toBe(null);
+    describe('when abs dx and abs dy are not equal', () => {
+      it('must return false', () => {
+        let v = new Vector({x: 3, y: 3}, {x: 3, y: 4});
+        expect(v.diagonal).toBe(false);
+      });
     });
   });
 
-  describe("points on with equal distances on x and y axes", () => {
-    it("must be diagonal", () => {
-      let v = new Vector({x: 1, y: 1}, {x: 3, y: 3});
-      expect(v.diagonal).toBe(true);
+  describe('orthogonal', () => {
+    describe('with the same x co-ordinates', () => {
+      it('must return true', () => {
+        let v = new Vector({x: 3, y: 3}, {x: 3, y: 4});
+        expect(v.orthogonal).toBe(true);
+      });
     });
 
-    it("must have a distance equal to one of the axes", () => {
-      let v = new Vector({x: 1, y: 1}, {x: 3, y: 3});
-      expect(v.distance).toBe(2);
+    describe('with the same y co-ordinates', () => {
+      it('must return true', () => {
+        let v = new Vector({x: 3, y: 3}, {x: 4, y: 3});
+        expect(v.orthogonal).toBe(true);
+      });
+    });
+
+    describe('with different x and y co-ordinates', () => {
+      it('must return false', () => {
+        let v = new Vector({x: 3, y: 3}, {x: 4, y: 4});
+        expect(v.orthogonal).toBe(false);
+      });
+    });
+  });
+
+  describe('orthogonalOrDiagonal', () => {
+    describe('orthogonal', () => {
+      it('must return true', () => {
+        let v = new Vector({x: 3, y: 3}, {x: 3, y: 4});
+        expect(v.orthogonalOrDiagonal).toBe(true);
+      });
+    });
+
+    describe('diagonal', () => {
+      it('must return true', () => {
+        let v = new Vector({x: 3, y: 3}, {x: 4, y: 4});
+        expect(v.orthogonalOrDiagonal).toBe(true);
+      });
+    });
+
+    describe('l shaped', () => {
+      it('must return false', () => {
+        let v = new Vector({x: 3, y: 3}, {x: 5, y: 4});
+        expect(v.orthogonalOrDiagonal).toBe(false);
+      });
+    });
+  });
+
+  describe('notOrthogonalOrDiagonal', () => {
+    describe('orthogonal', () => {
+      it('must return false', () => {
+        let v = new Vector({x: 3, y: 3}, {x: 3, y: 4});
+        expect(v.notOrthogonalOrDiagonal).toBe(false);
+      });
+    });
+
+    describe('diagonal', () => {
+      it('must return false', () => {
+        let v = new Vector({x: 3, y: 3}, {x: 4, y: 4});
+        expect(v.notOrthogonalOrDiagonal).toBe(false);
+      });
+    });
+
+    describe('l shaped', () => {
+      it('must return true', () => {
+        let v = new Vector({x: 3, y: 3}, {x: 5, y: 4});
+        expect(v.notOrthogonalOrDiagonal).toBe(true);
+      });
+    });
+  });
+
+  describe('magnitude', () => {
+    it('returns the maximum distance', () => {
+      let v = new Vector({x: 3, y: 3}, {x: 5, y: 4});
+      expect(v.magnitude).toEqual(2);  
     });
   });
 
