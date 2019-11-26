@@ -2,7 +2,7 @@
   "name": "@mrlhumphreys/jboardgame",
   "author": "Mark Humphreys <mark@mrlhumphreys.com>",
   "description": "Board Game utility classes and functions",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "main": "lib/index.js",
   "keywords": [
     "Board Game",
