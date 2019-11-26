@@ -94,12 +94,18 @@ export const length = function(squareSet) {
 // queries
 
 export const includes = function(squareSet, square) {
+  if (square === undefined) {
+    return false;
+  }
   return squareSet.squares.some(function(s) {
     return s.id === square.id;
   });
 };
 
 export const excludes = function(squareSet, square) {
+  if (square === undefined) {
+    return true;
+  }
   return !squareSet.squares.some(function(s) {
     return s.id === square.id;
   });

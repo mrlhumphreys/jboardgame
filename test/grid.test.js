@@ -376,6 +376,19 @@ describe('grid', () => {
         expect(result).toBe(false);
       });
     });
+
+    describe('passing in undefined', () => {
+      it('must return false', () => {
+        let squareSet = new SquareSet({
+          squares: [
+            { id: 1, x: 2, y: 3, piece: { selected: false } },
+            { id: 2, x: 3, y: 4, piece: { selected: true } }
+          ]
+        });
+        let result = includes(squareSet, undefined);
+        expect(result).toBe(false);
+      });
+    });
   });
 
   describe('excludes', () => {
@@ -403,6 +416,19 @@ describe('grid', () => {
         });
         let square = new Square({ id: 3, x: 4, y: 5, piece: { selected: false }});
         let result = excludes(squareSet, square);
+        expect(result).toBe(true);
+      });
+    });
+
+    describe('passing in undefined', () => {
+      it('must return true', () => {
+        let squareSet = new SquareSet({
+          squares: [
+            { id: 1, x: 2, y: 3, piece: { selected: false } },
+            { id: 2, x: 3, y: 4, piece: { selected: true } }
+          ]
+        });
+        let result = excludes(squareSet, undefined);
         expect(result).toBe(true);
       });
     });
