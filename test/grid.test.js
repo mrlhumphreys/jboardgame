@@ -81,6 +81,43 @@ class Square {
 class SquareSet {
   constructor(args) {
     this.squares = args.squares.map(function(s) { return new Square(s) });
+    this.squaresAsJson = squaresAsJson;
+    this.some = some;
+    this.many = many;
+    this.none = none;
+    this.every = every;
+    this.map = map;
+    this.filter = filter;
+    this.concat = concat;
+    this.difference = difference;
+    this.intersection = intersection;
+    this.uniq = uniq;
+    this.length = length;
+    this.includes = includes;
+    this.excludes = excludes;
+    this.first = first;
+    this.last = last;
+    this.selected = selected;
+    this.findById = findById;
+    this.findByCoordinate = findByCoordinate;
+    this.findByPieceId = findByPieceId;
+    this.squaresAwayFrom = squaresAwayFrom;
+    this.twoSquaresAwayFrom = twoSquaresAwayFrom;
+    this.oneSquareAwayFrom = oneSquareAwayFrom;
+    this.inRange = inRange;
+    this.atRange = atRange;
+    this.inDirection = inDirection;
+    this.orthogonal = orthogonal;
+    this.diagonal = diagonal;
+    this.sideways = sideways;
+    this.orthogonalOrDiagonal = orthogonalOrDiagonal;
+    this.notOrthogonalOrDiagonal = notOrthogonalOrDiagonal;
+    this.occupied = occupied;
+    this.unoccupied = unoccupied;
+    this.occupiedByPlayer = occupiedByPlayer;
+    this.occupiedByOpponentOf = occupiedByOpponentOf;
+    this.unblocked = unblocked;
+    this.between = between;
   }
 }
 
@@ -100,7 +137,7 @@ describe('grid', () => {
         ]
       };
 
-      let result = squaresAsJson(squareSet);
+      let result = squareSet.squaresAsJson();
 
       expect(result).toEqual(expected);
     });
@@ -117,7 +154,7 @@ describe('grid', () => {
           ]
         });
 
-        let result = some(squareSet);
+        let result = squareSet.some();
         expect(result).toBe(true);
       });
     });
@@ -128,7 +165,7 @@ describe('grid', () => {
           squares: []
         });
 
-        let result = some(squareSet);
+        let result = squareSet.some();
         expect(result).toBe(false);
       });
     });
@@ -145,7 +182,7 @@ describe('grid', () => {
           ]
         });
 
-        let result = many(squareSet);
+        let result = squareSet.many();
         expect(result).toBe(true);
       });
     });
@@ -158,7 +195,7 @@ describe('grid', () => {
           ]
         });
 
-        let result = many(squareSet);
+        let result = squareSet.many();
         expect(result).toBe(false);
       });
     });
@@ -171,7 +208,7 @@ describe('grid', () => {
           squares: []
         });
 
-        let result = none(squareSet);
+        let result = squareSet.none();
         expect(result).toBe(true);
       });
     });
@@ -186,7 +223,7 @@ describe('grid', () => {
           ]
         });
 
-        let result = none(squareSet);
+        let result = squareSet.none();
         expect(result).toBe(false);
       });
     });
@@ -203,7 +240,7 @@ describe('grid', () => {
           ]
         });
 
-        let result = every(squareSet, function(s) { return s.piece === null; });
+        let result = squareSet.every(function(s) { return s.piece === null; });
         expect(result).toBe(true);
       });
     });
@@ -218,7 +255,7 @@ describe('grid', () => {
           ]
         });
 
-        let result = every(squareSet, function(s) { return s.piece === null; });
+        let result = squareSet.every(function(s) { return s.piece === null; });
         expect(result).toBe(false);
       });
     });
@@ -232,7 +269,7 @@ describe('grid', () => {
           { id: 2, x: 3, y: 4, piece: { selected: true } }
         ]
       });
-      let result = map(squareSet, function(s) { return s.x; });
+      let result = squareSet.map(function(s) { return s.x; });
       expect(result).toEqual([2,3]);
     });
   });
@@ -247,7 +284,7 @@ describe('grid', () => {
         ]
       });
 
-      let result = filter(squareSet, function(s) { return s.x == 3; });
+      let result = squareSet.filter(function(s) { return s.x == 3; });
       expect(result.squares.length).toEqual(1);
       expect(result.squares[0].id).toEqual(2);
     });
@@ -267,7 +304,7 @@ describe('grid', () => {
         ]
       });
 
-      let result = concat(squareSetA, squareSetB);
+      let result = squareSetA.concat(squareSetB);
       expect(result.squares.length).toEqual(2);
       expect(result.squares[0].id).toEqual(1);
       expect(result.squares[1].id).toEqual(2);
@@ -290,7 +327,7 @@ describe('grid', () => {
         ]
       });
 
-      let result = difference(squareSetA, squareSetB);
+      let result = squareSetA.difference(squareSetB);
       expect(result.squares.length).toEqual(1);
       expect(result.squares[0].id).toEqual(2);
     });
@@ -312,7 +349,7 @@ describe('grid', () => {
         ]
       });
 
-      let result = intersection(squareSetA, squareSetB);
+      let result = squareSetA.intersection(squareSetB);
       expect(result.squares.length).toEqual(1);
       expect(result.squares[0].id).toEqual(3);
     });
@@ -328,7 +365,7 @@ describe('grid', () => {
         ]
       });
 
-      let result = uniq(squareSet);
+      let result = squareSet.uniq();
       expect(result.squares.length).toEqual(2);
       expect(result.squares[0].id).toEqual(1);
       expect(result.squares[1].id).toEqual(2);
@@ -343,7 +380,7 @@ describe('grid', () => {
           { id: 2, x: 3, y: 4, piece: { selected: true } }
         ]
       });
-      let result = length(squareSet);
+      let result = squareSet.length();
       expect(result).toEqual(2);
     });
   });
@@ -358,7 +395,7 @@ describe('grid', () => {
           ]
         });
         let square = new Square({ id: 1, x: 2, y: 3, piece: { selected: false }});
-        let result = includes(squareSet, square);
+        let result = squareSet.includes(square);
         expect(result).toBe(true);
       });
     });
@@ -372,7 +409,7 @@ describe('grid', () => {
           ]
         });
         let square = new Square({ id: 3, x: 4, y: 5, piece: { selected: false }});
-        let result = includes(squareSet, square);
+        let result = squareSet.includes(square);
         expect(result).toBe(false);
       });
     });
@@ -385,7 +422,7 @@ describe('grid', () => {
             { id: 2, x: 3, y: 4, piece: { selected: true } }
           ]
         });
-        let result = includes(squareSet, undefined);
+        let result = squareSet.includes(undefined);
         expect(result).toBe(false);
       });
     });
@@ -401,7 +438,7 @@ describe('grid', () => {
           ]
         });
         let square = new Square({ id: 1, x: 2, y: 3, piece: { selected: false }});
-        let result = excludes(squareSet, square);
+        let result = squareSet.excludes(square);
         expect(result).toBe(false);
       });
     });
@@ -415,7 +452,7 @@ describe('grid', () => {
           ]
         });
         let square = new Square({ id: 3, x: 4, y: 5, piece: { selected: false }});
-        let result = excludes(squareSet, square);
+        let result = squareSet.excludes(square);
         expect(result).toBe(true);
       });
     });
@@ -428,7 +465,7 @@ describe('grid', () => {
             { id: 2, x: 3, y: 4, piece: { selected: true } }
           ]
         });
-        let result = excludes(squareSet, undefined);
+        let result = squareSet.excludes(undefined);
         expect(result).toBe(true);
       });
     });
@@ -444,7 +481,7 @@ describe('grid', () => {
         ]
       });
 
-      let result = first(squareSet);
+      let result = squareSet.first();
       expect(result.id).toEqual(1);
     });
   });
@@ -459,7 +496,7 @@ describe('grid', () => {
         ]
       });
 
-      let result = last(squareSet);
+      let result = squareSet.last();
       expect(result.id).toEqual(3);
     });
   });
@@ -472,7 +509,7 @@ describe('grid', () => {
           { id: 2, x: 3, y: 4, piece: { selected: true } }
         ]
       });
-      let result = selected(squareSet);
+      let result = squareSet.selected();
       expect(result.id).toEqual(2);
     });
   });
@@ -486,7 +523,7 @@ describe('grid', () => {
             { id: 2, x: 3, y: 4 }
           ]
         });
-        let result = findById(squareSet, undefined);
+        let result = squareSet.findById(undefined);
         expect(result).toBe(undefined);
       });
     });
@@ -499,7 +536,7 @@ describe('grid', () => {
             { id: 2, x: 3, y: 4 }
           ]
         });
-        let result = findById(squareSet, [1,2]);
+        let result = squareSet.findById([1,2]);
         expect(result.squares.length).toBe(2);
         expect(result.squares[0].id).toEqual(1);
         expect(result.squares[1].id).toEqual(2);
@@ -514,7 +551,7 @@ describe('grid', () => {
             { id: 2, x: 3, y: 4 }
           ]
         });
-        let result = findById(squareSet, 1);
+        let result = squareSet.findById(1);
         expect(result.id).toEqual(1);
       });
     });
@@ -528,7 +565,7 @@ describe('grid', () => {
           { id: 2, x: 3, y: 4 }
         ]
       });
-      let result = findByCoordinate(squareSet, 2, 3);
+      let result = squareSet.findByCoordinate(2, 3);
       expect(result.id).toEqual(1);
     });
   });
@@ -542,7 +579,7 @@ describe('grid', () => {
         ]
       });
 
-      let result = findByPieceId(squareSet, 20);
+      let result = squareSet.findByPieceId(20);
       expect(result.id).toEqual(2);
     });
   });
@@ -561,7 +598,7 @@ describe('grid', () => {
       });
       let origin = new Square({ id: 3, x: 4, y: 4, piece: { selected: false, playerNumber: 1 }});
 
-      let result = squaresAwayFrom(squareSet, 3, origin);
+      let result = squareSet.squaresAwayFrom(3, origin);
       expect(result.squares.length).toEqual(2);
       expect(result.squares[0].id).toEqual(1);
       expect(result.squares[1].id).toEqual(5);
@@ -582,7 +619,7 @@ describe('grid', () => {
       });
       let origin = new Square({ id: 3, x: 4, y: 4, piece: { selected: false, playerNumber: 1 }});
 
-      let result = twoSquaresAwayFrom(squareSet, origin);
+      let result = squareSet.twoSquaresAwayFrom(origin);
       expect(result.squares.length).toEqual(1);
       expect(result.squares[0].id).toEqual(2);
     });
@@ -602,7 +639,7 @@ describe('grid', () => {
       });
       let origin = new Square({ id: 3, x: 4, y: 4, piece: { selected: false, playerNumber: 1 }});
 
-      let result = oneSquareAwayFrom(squareSet, origin);
+      let result = squareSet.oneSquareAwayFrom(origin);
       expect(result.squares.length).toEqual(1);
       expect(result.squares[0].id).toEqual(4);
     });
@@ -623,7 +660,7 @@ describe('grid', () => {
       });
       let origin = new Square({ id: 4, x: 4, y: 4, piece: { selected: false, playerNumber: 1 }});
 
-      let result = inRange(squareSet, origin, 2);
+      let result = squareSet.inRange(origin, 2);
       expect(result.squares.length).toEqual(5);
       expect(result.squares[0].id).toEqual(2);
       expect(result.squares[1].id).toEqual(3);
@@ -648,7 +685,7 @@ describe('grid', () => {
       });
       let origin = new Square({ id: 4, x: 4, y: 4, piece: { selected: false, playerNumber: 1 }});
 
-      let result = atRange(squareSet, origin, 2);
+      let result = squareSet.atRange(origin, 2);
       expect(result.squares.length).toEqual(2);
       expect(result.squares[0].id).toEqual(2);
       expect(result.squares[1].id).toEqual(6);
@@ -670,7 +707,7 @@ describe('grid', () => {
       });
       let origin = new Square({ id: 4, x: 4, y: 4, piece: { selected: false, playerNumber: 1 }});
 
-      let result = inDirection(squareSet, origin, 1);
+      let result = squareSet.inDirection(origin, 1);
       expect(result.squares.length).toEqual(3);
       expect(result.squares[0].id).toEqual(1);
       expect(result.squares[1].id).toEqual(2);
@@ -693,7 +730,7 @@ describe('grid', () => {
       });
       let origin = new Square({ id: 4, x: 4, y: 4, piece: { selected: false, playerNumber: 1 }});
 
-      let result = orthogonal(squareSet, origin);
+      let result = squareSet.orthogonal(origin);
       expect(result.squares.length).toEqual(4);
       expect(result.squares[0].id).toEqual(4);
       expect(result.squares[1].id).toEqual(5);
@@ -717,7 +754,7 @@ describe('grid', () => {
       });
       let origin = new Square({ id: 4, x: 4, y: 4, piece: { selected: false, playerNumber: 1 }});
 
-      let result = diagonal(squareSet, origin);
+      let result = squareSet.diagonal(origin);
       expect(result.squares.length).toEqual(4);
       expect(result.squares[0].id).toEqual(1);
       expect(result.squares[1].id).toEqual(2);
@@ -744,7 +781,7 @@ describe('grid', () => {
       });
       let origin = new Square({ id: 4, x: 4, y: 4, piece: { selected: false, playerNumber: 1 }});
 
-      let result = sideways(squareSet, origin);
+      let result = squareSet.sideways(origin);
       expect(result.squares.length).toEqual(4);
       expect(result.squares[0].id).toEqual(4);
       expect(result.squares[1].id).toEqual(8);
@@ -769,7 +806,7 @@ describe('grid', () => {
       });
       let origin = new Square({ id: 4, x: 4, y: 4, piece: { selected: false, playerNumber: 1 }});
 
-      let result = orthogonalOrDiagonal(squareSet, origin);
+      let result = squareSet.orthogonalOrDiagonal(origin);
       expect(result.squares.length).toEqual(7);
       expect(result.squares[0].id).toEqual(1);
       expect(result.squares[1].id).toEqual(2);
@@ -797,7 +834,7 @@ describe('grid', () => {
       });
       let origin = new Square({ id: 4, x: 4, y: 4, piece: { selected: false, playerNumber: 1 }});
 
-      let result = notOrthogonalOrDiagonal(squareSet, origin);
+      let result = squareSet.notOrthogonalOrDiagonal(origin);
       expect(result.squares.length).toEqual(1);
       expect(result.squares[0].id).toEqual(7);
     });
@@ -813,7 +850,7 @@ describe('grid', () => {
         ]
       });
 
-      let result = occupied(squareSet);
+      let result = squareSet.occupied();
       expect(result.squares.length).toEqual(2);
       expect(result.squares[0].id).toEqual(1);
       expect(result.squares[1].id).toEqual(3);
@@ -830,7 +867,7 @@ describe('grid', () => {
         ]
       });
 
-      let result = unoccupied(squareSet);
+      let result = squareSet.unoccupied();
       expect(result.squares.length).toEqual(1);
       expect(result.squares[0].id).toEqual(2);
     });
@@ -846,7 +883,7 @@ describe('grid', () => {
         ]
       });
 
-      let result = occupiedByPlayer(squareSet, 1);
+      let result = squareSet.occupiedByPlayer(1);
       expect(result.squares.length).toEqual(1);
       expect(result.squares[0].id).toEqual(1);
     });
@@ -862,7 +899,7 @@ describe('grid', () => {
         ]
       });
 
-      let result = occupiedByOpponentOf(squareSet, 1);
+      let result = squareSet.occupiedByOpponentOf(1);
       expect(result.squares.length).toEqual(1);
       expect(result.squares[0].id).toEqual(3);
     });
@@ -880,7 +917,7 @@ describe('grid', () => {
       });
       let origin = new Square({ id: 1, x: 7, y: 7, piece: { selected: false, playerNumber: 1 }});
 
-      let result = unblocked(squareSet, origin, squareSet); 
+      let result = squareSet.unblocked(origin, squareSet); 
       expect(result.squares.length).toEqual(3);
       expect(result.squares[0].id).toEqual(1);
       expect(result.squares[1].id).toEqual(2);
@@ -904,7 +941,7 @@ describe('grid', () => {
         let origin = new Square({ id: 1, x: 1, y: 1, piece: { selected: false, playerNumber: 2 }});
         let destination = new Square({ id: 5, x: 4, y: 4, piece: null });
 
-        let result = between(squareSet, origin, destination);
+        let result = squareSet.between(origin, destination);
         expect(result.squares.length).toEqual(2);
         expect(result.squares[0].id).toEqual(2);
         expect(result.squares[1].id).toEqual(3);
@@ -926,7 +963,7 @@ describe('grid', () => {
         let origin = new Square({ id: 1, x: 1, y: 1, piece: { selected: false, playerNumber: 2 }});
         let destination = new Square({ id: 4, x: 3, y: 4, piece: null });
 
-        let result = between(squareSet, origin, destination);
+        let result = squareSet.between(origin, destination);
         expect(result.squares.length).toEqual(0);
       });
     });
