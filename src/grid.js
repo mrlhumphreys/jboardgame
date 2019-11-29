@@ -260,7 +260,7 @@ export const occupiedByOpponentOf = function(playerNumber) {
 
 export const unblocked = function(origin, board) {
   let _squares = this.squares.filter((destination) => {
-    return this.between(origin, destination).squares.every(function(s) {
+    return board.between(origin, destination).squares.every(function(s) {
       return s.unoccupied;
     });
   });
