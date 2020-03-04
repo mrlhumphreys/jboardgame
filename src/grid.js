@@ -1,6 +1,10 @@
 import { exists } from './utils'
 import Vector from './vector'
 
+/**
+ * Serialize squares as simple objects.
+ * @return {Object}
+ */
 export const squaresAsJson = function() {
   return {
     squares: this.squares.map(function(square) { return square.asJson; })
@@ -9,6 +13,12 @@ export const squaresAsJson = function() {
 
 // callbacks
 
+/**
+ * Do some of the elements satisfy the callback function?
+ * With no callback, check if there is more than 0 elements.
+ * @param {Function} [callback=undefined] - The callback function.
+ * @return {boolean}
+ */
 export const some = function(callback) {
   if (exists(callback)) {
     return this.squares.some(callback);
@@ -17,6 +27,12 @@ export const some = function(callback) {
   }
 };
 
+/**
+ * Do more than one element satisfy the callback function?
+ * With no callback, check if there is more than 1 element.
+ * @param {Function} [callback=undefined] - The callback function.
+ * @return {boolean}
+ */
 export const many = function(callback) {
   if (exists(callback)) {
     return this.squares.filter(callback).length > 1;
@@ -25,6 +41,12 @@ export const many = function(callback) {
   }
 };
 
+/**
+ * Do none of the elements satisfy the callback function?
+ * With no callback, check if there is 0 elements.
+ * @param {Function} [callback=undefined] - The callback function.
+ * @return {boolean}
+ */
 export const none = function(callback) {
   if (exists(callback)) {
     return !this.squares.some(callback);
@@ -33,14 +55,29 @@ export const none = function(callback) {
   }
 };
 
+/**
+ * Does every element satisfy the callback function?
+ * @param {Function} callback - The callback function.
+ * @return {boolean}
+ */
 export const every = function(callback) {
   return this.squares.every(callback);
 };
 
+/**
+ * Run the callback function through map on the squares.
+ * @param {Function} callback - The callback function.
+ * @return {Object[]}
+ */
 export const map = function(callback) {
   return this.squares.map(callback);
 };
 
+/**
+ * Filter the squares based on the callback function.
+ * @param {Function} callback - The callback function.
+ * @return {Grid}
+ */
 export const filter = function(callback) {
   let _squares = this.squares.filter(callback);
   return new this.constructor({squares: _squares});
@@ -48,11 +85,21 @@ export const filter = function(callback) {
 
 // operations
 
+/**
+ * Concatenate two grids.
+ * @param {Grid} other - The other grid.
+ * @return {Grid}
+ */
 export const concat = function(other) {
   let _squares = this.squares.concat(other.squares);
   return new this.constructor({squares: _squares});
 };
 
+/**
+ * Get the difference between two grids.
+ * @param {Grid} other - The other grid.
+ * @return {Grid}
+ */
 export const difference = function(other) {
   let _squares = this.squares.filter(function(squareA) {
     return !other.squares.some(function(squareB) {
@@ -62,6 +109,11 @@ export const difference = function(other) {
   return new this.constructor({"squares": _squares});
 };
 
+/**
+ * Get the intersection between two grids.
+ * @param {Grid} other - The other grid.
+ * @return {Grid}
+ */
 export const intersection = function(other) {
   let _squares = this.squares.filter(function(squareA) {
     return other.squares.some(function(squareB) {
@@ -71,6 +123,10 @@ export const intersection = function(other) {
   return new this.constructor({squares: _squares});
 };
 
+/**
+ * Remove non-unique elements from the grid.
+ * @return {Grid}
+ */
 export const uniq = function() {
   let ids = this.squares.map(function(square) {
     return square.id;
@@ -87,12 +143,21 @@ export const uniq = function() {
   return new this.constructor({squares: _squares});
 }
 
+/**
+ * Get the length of squares in the grid.
+ * @return {number}
+ */
 export const length = function() {
   return this.squares.length;
 };
 
 // queries
 
+/**
+ * Does the grid include square?
+ * @param {Square} square - The square.
+ * @return {boolean}
+ */
 export const includes = function(square) {
   if (square === undefined) {
     return false;
@@ -102,6 +167,11 @@ export const includes = function(square) {
   });
 };
 
+/**
+ * Does the grid exclude square?
+ * @param {Square} square - The square.
+ * @return {boolean}
+ */
 export const excludes = function(square) {
   if (square === undefined) {
     return true;
@@ -113,20 +183,37 @@ export const excludes = function(square) {
 
 // finder
 
+/**
+ * Get the first square.
+ * @return {(Square|undefined)}
+ */
 export const first = function() {
   return this.squares[0];
 };
 
+/**
+ * Get the last square.
+ * @return {(Square|undefined)}
+ */
 export const last = function() {
   return this.squares.slice(-1)[0];
 };
 
+/**
+ * Get the square with a selected piece.
+ * @return {(Square|undefined)}
+ */
 export const selected = function() {
   return this.squares.filter(function(s) {
     return (exists(s.piece) && s.piece.selected);
   })[0];
 };
 
+/**
+ * Find a square by id.
+ * @param {(number|number[])} id - The id or ids of the square/s.
+ * @return {(Square|Square[]|undefined)}
+ */
 export const findById = function(id) {
   if (!exists(id)) {
     return undefined;
@@ -144,12 +231,23 @@ export const findById = function(id) {
   }
 };
 
+/**
+ * Find a square by co-ordinates.
+ * @param {number} x - The x co-ordinate.
+ * @param {number} y - The y co-ordinate.
+ * @return {(Square|undefined)}
+ */
 export const findByCoordinate = function(x, y) {
   return this.squares.filter(function(s) {
     return (s.x === x) && (s.y === y);
   })[0];
 };
 
+/**
+ * Find a square by piece id.
+ * @param {number} pieceId - The id of the piece.
+ * @return {(Square|undefined)}
+ */
 export const findByPieceId = function(pieceId) {
   return this.squares.filter(function(s) {
     return exists(s.piece) && s.piece.id === pieceId;
@@ -158,6 +256,12 @@ export const findByPieceId = function(pieceId) {
 
 // filters
 
+/**
+ * Get squares that are n squares away from a square.
+ * @param {number} number - The distance between squares.
+ * @param {Square} from - The origin square.
+ * @return {Grid}
+ */
 export const squaresAwayFrom = function(number, from) {
   let _squares = this.squares.filter((s) => {
     return (new Vector(s, from)).distance === number;
@@ -165,14 +269,30 @@ export const squaresAwayFrom = function(number, from) {
   return new this.constructor({squares: _squares});
 };
 
+/**
+ * Get squares that are 2 squares away from a square.
+ * @param {Square} from - The origin square.
+ * @return {Grid}
+ */
 export const twoSquaresAwayFrom = function(from) {
   return this.squaresAwayFrom(2, from);
 };
 
+/**
+ * Get squares that are 1 square away from a square.
+ * @param {Square} from - The origin square.
+ * @return {Grid}
+ */
 export const oneSquareAwayFrom = function(from) {
   return this.squaresAwayFrom(1, from);
 };
 
+/**
+ * Get squares that are in range of square.
+ * @param {Square} square - The origin square.
+ * @param {number} distance - The distance between squares.
+ * @return {Grid}
+ */
 export const inRange = function(square, distance) {
   let _squares = this.squares.filter(function(s) {
     return (new Vector(square, s)).magnitude <= distance;
@@ -180,6 +300,12 @@ export const inRange = function(square, distance) {
   return new this.constructor({squares: _squares});
 };
 
+/**
+ * Get squares that are at range of square.
+ * @param {Square} square - The origin square.
+ * @param {number} distance - The distance between squares.
+ * @return {Grid}
+ */
 export const atRange = function(square, distance) {
   let _squares = this.squares.filter(function(s) {
     return (new Vector(square, s)).magnitude === distance;
@@ -187,6 +313,12 @@ export const atRange = function(square, distance) {
   return new this.constructor({squares: _squares});
 };
 
+/**
+ * Get squares that are in player's direction from square.
+ * @param {Square} square - The origin square.
+ * @param {number} playerNumber - The number of the player.
+ * @return {Grid}
+ */
 export const inDirection = function(square, playerNumber) {
   let direction = (playerNumber === 1 ? -1 : 1);
   let _squares = this.squares.filter(function(s) { 
@@ -195,6 +327,11 @@ export const inDirection = function(square, playerNumber) {
   return new this.constructor({squares: _squares});
 };
 
+/**
+ * Get all squares that are orthogonal to square.
+ * @param {Square} square - The origin square.
+ * @return {Grid}
+ */
 export const orthogonal = function(square) {
   let _squares = this.squares.filter(function(s) {
     return (new Vector(square, s)).orthogonal;
@@ -202,6 +339,11 @@ export const orthogonal = function(square) {
   return new this.constructor({squares: _squares});
 };
 
+/**
+ * Get all squares that are diagonal to square.
+ * @param {Square} square - The origin square.
+ * @return {Grid}
+ */
 export const diagonal = function(square) {
   let _squares = this.squares.filter(function(s) {
     return (new Vector(square, s)).diagonal;
@@ -209,6 +351,11 @@ export const diagonal = function(square) {
   return new this.constructor({squares: _squares});
 };
 
+/**
+ * Get all squares that are sideways to square.
+ * @param {Square} square - The origin square.
+ * @return {Grid}
+ */
 export const sideways = function(square) {
   let _squares = this.squares.filter(function(s) {
     return square.y === s.y;
@@ -216,6 +363,11 @@ export const sideways = function(square) {
   return new this.constructor({squares: _squares});
 };
 
+/**
+ * Get all squares that are orthogonal or diagonal to square.
+ * @param {Square} square - The origin square.
+ * @return {Grid}
+ */
 export const orthogonalOrDiagonal = function(square) {
   let _squares = this.squares.filter(function(s) {
     return (new Vector(square, s)).orthogonalOrDiagonal;
@@ -223,6 +375,11 @@ export const orthogonalOrDiagonal = function(square) {
   return new this.constructor({squares: _squares});
 };
 
+/**
+ * Get all squares that are not orthogonal nor diagonal to square.
+ * @param {Square} square - The origin square.
+ * @return {Grid}
+ */
 export const notOrthogonalOrDiagonal = function(square) {
   let _squares = this.squares.filter(function(s) {
     return (new Vector(square, s)).notOrthogonalOrDiagonal;
@@ -230,6 +387,10 @@ export const notOrthogonalOrDiagonal = function(square) {
   return new this.constructor({squares: _squares});
 };
 
+/**
+ * Get all occupied squares.
+ * @return {Grid}
+ */
 export const occupied = function() {
   let _squares = this.squares.filter(function(s) {
     return s.occupied;
@@ -237,6 +398,10 @@ export const occupied = function() {
   return new this.constructor({squares: _squares});
 };
 
+/**
+ * Get all unoccupied squares.
+ * @return {Grid}
+ */
 export const unoccupied = function() {
   let _squares = this.squares.filter(function(s) {
     return s.unoccupied;
@@ -244,6 +409,11 @@ export const unoccupied = function() {
   return new this.constructor({squares: _squares});
 };
 
+/**
+ * Get all squares occupied by player.
+ * @param {number} playerNumber - The number of the player.
+ * @return {Grid}
+ */
 export const occupiedByPlayer = function(playerNumber) {
   let _squares = this.squares.filter(function(s) {
     return s.occupiedByPlayer(playerNumber);
@@ -251,6 +421,11 @@ export const occupiedByPlayer = function(playerNumber) {
   return new this.constructor({squares: _squares});
 }
 
+/**
+ * Get all squares occupied by opponent of player.
+ * @param {number} playerNumber - The number of the player.
+ * @return {Grid}
+ */
 export const occupiedByOpponentOf = function(playerNumber) {
   let _squares = this.squares.filter(function(s) {
     return s.occupiedByOpponentOf(playerNumber);
@@ -258,6 +433,12 @@ export const occupiedByOpponentOf = function(playerNumber) {
   return new this.constructor({squares: _squares});
 };
 
+/**
+ * Get all squares that are not blocked from origin.
+ * @param {Square} origin - The origin square.
+ * @param {Grid} board - The complete board state.
+ * @return {Grid}
+ */
 export const unblocked = function(origin, board) {
   let _squares = this.squares.filter((destination) => {
     return board.between(origin, destination).squares.every(function(s) {
@@ -267,6 +448,12 @@ export const unblocked = function(origin, board) {
   return new this.constructor({squares: _squares});
 };
 
+/**
+ * Get all squares between two squares.
+ * @param {Square} a - The origin square.
+ * @param {Square} b - The destination square.
+ * @return {Grid}
+ */
 export const between = function(a, b) {
   let vector = new Vector(a, b);
   let squares = [];

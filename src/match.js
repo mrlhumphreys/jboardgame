@@ -1,10 +1,20 @@
 import { exists } from './utils'
 import Player from './player'
 
+/**
+ * Build player objects from an array of properties.
+ * @param {Object[]} players - An array of player properties.
+ * @return {Player[]}
+ */
 export const buildPlayers = function(players) {
   return players.map(function(p) { return new Player(p); }); 
 };
 
+/**
+ * Sanitize last action object.
+ * @param {Object} lastAction - The last action taken.
+ * @return {(Object|null)}
+ */
 export const buildLastAction = function(lastAction) {
   return exists(lastAction) ? lastAction : null;
 };
@@ -31,10 +41,22 @@ const defaultMessage = function(match) {
   }
 };
 
+/**
+ * Build a notification message based on the match.
+ * Returns a default message if no notification provided.
+ * @param {Match} match - The match being played.
+ * @param {string} notification - The notification message.
+ * @return {string}
+ */
 export const buildNotification = function(match, notification) {
   return exists(notification) ? notification : defaultMessage(match);
 };
 
+/**
+ * The winner of a match.
+ * @param {Match} match - The match being played.
+ * @return {(number|null)}
+ */
 export const winner = function(match) {
   let playerResigned = match.players.some(function(p) { return p.resigned; });
   if (playerResigned) {
@@ -44,6 +66,11 @@ export const winner = function(match) {
   }
 };
 
+/**
+ * The match serialized as an object.
+ * @param {Match} match - The match being played.
+ * @return {Object}
+ */
 export const matchAsJson = function(match) {
   return {
     id: match.id,
