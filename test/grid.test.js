@@ -1,13 +1,16 @@
 import { exists } from '../src/utils'
 import Point from '../src/point'
+
 import {
   squaresAsJson,
+  squaresDup,
   some,
   many,
   none,
   every,
   map,
   filter,
+  push,
   concat,
   difference,
   intersection,
@@ -36,9 +39,25 @@ import {
   unoccupied,
   occupiedByPlayer,
   occupiedByOpponentOf,
+  unoccupiedOrOccupiedByOpponent,
+  occupiedByPiece,
+  excludingPiece,
   unblocked,
   between
 } from '../src/grid'
+
+import {
+  squareAsJson,
+  squareDup,
+  point,
+  squareOccupied,
+  squareUnoccupied,
+  squareOccupiedByPlayer,
+  squareOccupiedByOpponentOf,
+  squareUnoccupiedOrOccupiedByOpponentOf,
+  squareOccupiedByPiece,
+  squareNotOccupiedByPiece,
+} from '../src/square'
 
 class Square {
   constructor(args) {
@@ -46,35 +65,17 @@ class Square {
     this.x = args.x;
     this.y = args.y;
     this.piece = args.piece;
-  }
 
-  get point() {
-    return new Point(this.x, this.y);
-  }
-
-  occupiedByOpponentOf(playerNumber) {
-    return exists(this.piece) && this.piece.playerNumber !== playerNumber;
-  }
-
-  occupiedByPlayer(playerNumber) {
-    return exists(this.piece) && this.piece.playerNumber === playerNumber;
-  }
-
-  get occupied() {
-    return exists(this.piece);
-  }
-
-  get unoccupied() {
-    return !exists(this.piece);
-  }
-
-  get asJson() {
-    return {
-      id: this.id,
-      x: this.x,
-      y: this.y,
-      piece: this.piece
-    };
+    this.asJson = squareAsJson;
+    this.dup = squareDup;
+    this.point = point;
+    this.occupied = squareOccupied;
+    this.unoccupied = squareUnoccupied;
+    this.occupiedByPlayer = squareOccupiedByPlayer;
+    this.occupiedByOpponentOf = squareOccupiedByOpponentOf;
+    this.unoccupiedOrOccupiedByOpponentOf = squareUnoccupiedOrOccupiedByOpponentOf;
+    this.occupiedByPiece = squareOccupiedByPiece;
+    this.notOccupiedByPiece = squareNotOccupiedByPiece;
   }
 }
 
@@ -82,12 +83,14 @@ class SquareSet {
   constructor(args) {
     this.squares = args.squares.map(function(s) { return new Square(s) });
     this.squaresAsJson = squaresAsJson;
+    this.dup = squaresDup;
     this.some = some;
     this.many = many;
     this.none = none;
     this.every = every;
     this.map = map;
     this.filter = filter;
+    this.push = push;
     this.concat = concat;
     this.difference = difference;
     this.intersection = intersection;
@@ -116,6 +119,9 @@ class SquareSet {
     this.unoccupied = unoccupied;
     this.occupiedByPlayer = occupiedByPlayer;
     this.occupiedByOpponentOf = occupiedByOpponentOf;
+    this.unoccupiedOrOccupiedByOpponent = unoccupiedOrOccupiedByOpponent;
+    this.occupiedByPiece = occupiedByPiece;
+    this.excludingPiece = excludingPiece;
     this.unblocked = unblocked;
     this.between = between;
   }
@@ -126,20 +132,35 @@ describe('grid', () => {
     it('must return an array of simple objects', () => {
       let squareSet = new SquareSet({
         squares: [
-          { id: 1, x: 2, y: 3 },
-          { id: 2, x: 3, y: 4 }
+          { id: 1, x: 2, y: 3, piece: null },
+          { id: 2, x: 3, y: 4, piece: null }
         ]
       });
       let expected = {
         squares: [
-          { id: 1, x: 2, y: 3 },
-          { id: 2, x: 3, y: 4 }
+          { id: 1, x: 2, y: 3, piece: null },
+          { id: 2, x: 3, y: 4, piece: null }
         ]
       };
 
       let result = squareSet.squaresAsJson();
 
       expect(result).toEqual(expected);
+    });
+  });
+
+  describe('dup', () => {
+    it('returns a square set with the same content', () => {
+      let squareSet = new SquareSet({
+        squares: [
+          { id: 1, x: 2, y: 3, piece: { selected: false } },
+          { id: 2, x: 3, y: 4, piece: { selected: true } },
+          { id: 3, x: 4, y: 5, piece: { selected: false } }
+        ]
+      });
+
+      let result = squareSet.dup();
+      expect(result.squares.length).toEqual(squareSet.squares.length);      
     });
   });
 
@@ -287,6 +308,26 @@ describe('grid', () => {
       let result = squareSet.filter(function(s) { return s.x == 3; });
       expect(result.squares.length).toEqual(1);
       expect(result.squares[0].id).toEqual(2);
+    });
+  });
+
+  describe('push', () => {
+    describe('object', () => {
+      let squareSet = new SquareSet({ squares: [] });
+      let square = new Square({ id: 1, x: 2, y: 3, piece: { selected: false }});
+
+      let result = squareSet.push(square);
+
+      expect(result.squares.length).toEqual(1);
+      expect(result.squares[0].id).toEqual(1);
+    });
+
+    describe('null', () => {
+      let squareSet = new SquareSet({ squares: [] });
+
+      let result = squareSet.push(null);
+
+      expect(result.squares.length).toEqual(0);
     });
   });
 
@@ -902,6 +943,58 @@ describe('grid', () => {
       let result = squareSet.occupiedByOpponentOf(1);
       expect(result.squares.length).toEqual(1);
       expect(result.squares[0].id).toEqual(3);
+    });
+  });
+
+  describe('unoccupiedOrOccupiedByOpponent', () => {
+    it('returns unoccupied or occupied by opponent squares', () => {
+      let squareSet = new SquareSet({
+        squares: [
+          { id: 1, x: 2, y: 3, piece: { selected: false, playerNumber: 1 } },
+          { id: 2, x: 3, y: 4, piece: null },
+          { id: 3, x: 4, y: 5, piece: { selected: false, playerNumber: 2 } }
+        ]
+      });
+
+      let result = squareSet.unoccupiedOrOccupiedByOpponent(1);
+      expect(result.squares.length).toEqual(2);
+      expect(result.squares[0].id).toEqual(2);
+      expect(result.squares[1].id).toEqual(3);
+    });
+  });
+
+  describe('occupiedByPiece', () => {
+    it('returns pieces occupied by that piece type', () => {
+      let squareSet = new SquareSet({
+        squares: [
+          { id: 1, x: 2, y: 3, piece: { selected: false, playerNumber: 1, type: 'king' } },
+          { id: 2, x: 3, y: 4, piece: { selected: false, playerNumber: 1, type: 'pawn' } },
+          { id: 3, x: 4, y: 5, piece: { selected: false, playerNumber: 1, type: 'rook' } }
+        ]
+      });
+
+      let result = squareSet.occupiedByPiece('king');
+
+      expect(result.squares.length).toEqual(1);
+      expect(result.squares[0].piece.type).toEqual('king');
+    });
+  });
+
+  describe('excludingPiece', () => {
+    it('returns squares occupied by without that piece', () => {
+      let squareSet = new SquareSet({
+        squares: [
+          { id: 1, x: 2, y: 3, piece: { selected: false, playerNumber: 1, type: 'king' } },
+          { id: 2, x: 3, y: 4, piece: { selected: false, playerNumber: 1, type: 'pawn' } },
+          { id: 3, x: 4, y: 5, piece: { selected: false, playerNumber: 1, type: 'rook' } }
+        ]
+      });
+
+      let result = squareSet.excludingPiece('king');
+
+      expect(result.squares.length).toEqual(2);
+      expect(result.squares[0].piece.type).toEqual('pawn');
+      expect(result.squares[1].piece.type).toEqual('rook');
     });
   });
 

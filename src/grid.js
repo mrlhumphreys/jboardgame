@@ -7,8 +7,17 @@ import Vector from './vector'
  */
 export const squaresAsJson = function() {
   return {
-    squares: this.squares.map(function(square) { return square.asJson; })
+    squares: this.squares.map(function(square) { return square.asJson(); })
   };
+};
+
+/**
+ * Duplicate the grid.
+ * @return {Object}
+ */
+export const squaresDup = function() {
+  let _squares = this.squares.map(function(s) { return s.dup; }); 
+  return new this.constructor({squares: _squares});
 };
 
 // callbacks
@@ -84,6 +93,21 @@ export const filter = function(callback) {
 };
 
 // operations
+
+/**
+ * Push a square onto the square set.
+ * Returns the square set.
+ * @param {(Square|null)} square - The square being pushed.
+ * @return {SquareSet}
+ */
+export const push = function(square) {
+  if (exists(square)) {
+    this.squares.push(square);
+    return new this.constructor({squares: this.squares});
+  } else {
+    return this;
+  }
+};
 
 /**
  * Concatenate two grids.
@@ -393,7 +417,7 @@ export const notOrthogonalOrDiagonal = function(square) {
  */
 export const occupied = function() {
   let _squares = this.squares.filter(function(s) {
-    return s.occupied;
+    return s.occupied();
   });
   return new this.constructor({squares: _squares});
 };
@@ -404,7 +428,7 @@ export const occupied = function() {
  */
 export const unoccupied = function() {
   let _squares = this.squares.filter(function(s) {
-    return s.unoccupied;
+    return s.unoccupied();
   });
   return new this.constructor({squares: _squares});
 };
@@ -434,6 +458,39 @@ export const occupiedByOpponentOf = function(playerNumber) {
 };
 
 /**
+ * Filter all squares unoccupied or occupied by opponent.
+ * @param {number} playerNumber - The number of the player.
+ * @return {SquareSet}
+ */
+export const unoccupiedOrOccupiedByOpponent = function(playerNumber) {
+  return this.filter(function(s) {
+    return s.unoccupiedOrOccupiedByOpponentOf(playerNumber);
+  });
+};
+
+/**
+ * Filter all squares occupied by piece type.
+ * @param {string} pieceType - The type of the piece.
+ * @return {SquareSet}
+ */
+export const occupiedByPiece = function(pieceType) {
+  return this.filter(function(s) {
+    return s.occupiedByPiece(pieceType);
+  });
+};
+
+/**
+ * Filter all squares not occupied by piece type.
+ * @param {string} pieceType - The type of the piece.
+ * @return {SquareSet}
+ */
+export const excludingPiece = function(pieceType) {
+  return this.filter(function(s) {
+    return s.notOccupiedByPiece(pieceType);
+  });
+};
+
+/**
  * Get all squares that are not blocked from origin.
  * @param {Square} origin - The origin square.
  * @param {Grid} board - The complete board state.
@@ -442,7 +499,7 @@ export const occupiedByOpponentOf = function(playerNumber) {
 export const unblocked = function(origin, board) {
   let _squares = this.squares.filter((destination) => {
     return board.between(origin, destination).squares.every(function(s) {
-      return s.unoccupied;
+      return s.unoccupied();
     });
   });
   return new this.constructor({squares: _squares});
@@ -459,15 +516,15 @@ export const between = function(a, b) {
   let squares = [];
 
   if (vector.orthogonalOrDiagonal) {
-    let pointCounter = a.point;
+    let pointCounter = a.point();
     let direction = vector.direction;
     squares = [];
 
-    while (pointCounter.notEq(b.point)) {
+    while (pointCounter.notEq(b.point())) {
       pointCounter = pointCounter.add(direction);
       let square = this.findByCoordinate(pointCounter.x, pointCounter.y);
 
-      if (exists(square) && square.point.notEq(b.point)) {
+      if (exists(square) && square.point().notEq(b.point())) {
         squares.push(square);
       }
     }
