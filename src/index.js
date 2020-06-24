@@ -46,12 +46,30 @@ import {
   between
 } from './grid'
 
+import {
+  squareAsJson,
+  squareDup,
+  squareOccupied,
+  squareUnoccupied,
+  squareOccupiedByPlayer,
+  squareOccupiedByOpponentOf,
+  squareUnoccupiedOrOccupiedByOpponentOf,
+  squareOccupiedByPiece,
+  squareNotOccupiedByPiece,
+  point,
+  select,
+  deselect,
+  addPiece,
+  removePiece
+} from './square'
+
 export { 
   buildPlayers, 
   buildLastAction, 
   buildNotification, 
   winner, 
   matchAsJson,
+
   squaresAsJson,
   some,
   many,
@@ -88,5 +106,20 @@ export {
   occupiedByPlayer,
   occupiedByOpponentOf,
   unblocked,
-  between
+  between,
+
+  squareAsJson,
+  squareDup,
+  squareOccupied,
+  squareUnoccupied,
+  squareOccupiedByPlayer,
+  squareOccupiedByOpponentOf,
+  squareUnoccupiedOrOccupiedByOpponentOf,
+  squareOccupiedByPiece,
+  squareNotOccupiedByPiece,
+  point,
+  select,
+  deselect,
+  addPiece,
+  removePiece
 };
