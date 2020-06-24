@@ -8,12 +8,14 @@ import {
 
 import {
   squaresAsJson,
+  squaresDup,
   some,
   many,
   none,
   every,
   map,
   filter,
+  push,
   concat,
   difference,
   intersection,
@@ -42,6 +44,9 @@ import {
   unoccupied,
   occupiedByPlayer,
   occupiedByOpponentOf,
+  unoccupiedOrOccupiedByOpponent,
+  occupiedByPiece,
+  excludingPiece,
   unblocked,
   between
 } from './grid'
@@ -71,12 +76,14 @@ export {
   matchAsJson,
 
   squaresAsJson,
+  squaresDup,
   some,
   many,
   none,
   every,
   map,
   filter,
+  push,
   concat,
   difference,
   intersection,
@@ -105,6 +112,9 @@ export {
   unoccupied,
   occupiedByPlayer,
   occupiedByOpponentOf,
+  unoccupiedOrOccupiedByOpponent,
+  occupiedByPiece,
+  excludingPiece,
   unblocked,
   between,
 
