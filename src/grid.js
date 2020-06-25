@@ -16,7 +16,7 @@ export const squaresAsJson = function() {
  * @return {Object}
  */
 export const squaresDup = function() {
-  let _squares = this.squares.map(function(s) { return s.dup; }); 
+  let _squares = this.squares.map(function(s) { return s.dup(); }); 
   return new this.constructor({squares: _squares});
 };
 
