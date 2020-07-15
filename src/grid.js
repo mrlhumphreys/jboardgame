@@ -1,4 +1,4 @@
-import { exists } from './utils'
+import { exists, union as unionArr, uniq as uniqArr } from './utils'
 import Vector from './vector'
 
 /**
@@ -120,6 +120,25 @@ export const concat = function(other) {
 };
 
 /**
+ * Union two grids.
+ * @param {Grid} other - THe other grid.
+ * @return {Grid}
+ */
+export const union = function(other) {
+  let squareAIds = this.squares.map(function(square) { return square.id; });
+  let squareBIds = other.squares.map(function(square) { return square.id; });
+  let ids = unionArr(squareAIds, squareBIds);
+
+  let _squares = ids.map((id) => {
+    return this.squares.filter(function(square) {
+      return square.id === id;
+    })[0];
+  });
+
+  return new this.constructor({squares: _squares});
+};
+
+/**
  * Get the difference between two grids.
  * @param {Grid} other - The other grid.
  * @return {Grid}
@@ -152,12 +171,10 @@ export const intersection = function(other) {
  * @return {Grid}
  */
 export const uniq = function() {
-  let ids = this.squares.map(function(square) {
+  let ids = uniqArr(this.squares.map(function(square) {
     return square.id;
-  }).filter(function(id, index, array) {
-    return array.indexOf(id) === index;
-  });
-  
+  }));  
+
   let _squares = ids.map((id) => {
     return this.squares.filter(function(square) {
       return square.id === id;

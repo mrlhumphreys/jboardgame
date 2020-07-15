@@ -12,6 +12,7 @@ import {
   filter,
   push,
   concat,
+  union,
   difference,
   intersection,
   uniq,
@@ -92,6 +93,7 @@ class SquareSet {
     this.filter = filter;
     this.push = push;
     this.concat = concat;
+    this.union = union;
     this.difference = difference;
     this.intersection = intersection;
     this.uniq = uniq;
@@ -346,6 +348,28 @@ describe('grid', () => {
       });
 
       let result = squareSetA.concat(squareSetB);
+      expect(result.squares.length).toEqual(2);
+      expect(result.squares[0].id).toEqual(1);
+      expect(result.squares[1].id).toEqual(2);
+    });
+  });
+
+  describe('union', () => {
+    it('returns a square set with all elements without duplicates', () => {
+      let squareSetA = new SquareSet({
+        squares: [
+          { id: 1, x: 2, y: 3, piece: { selected: false } },
+          { id: 2, x: 3, y: 4, piece: { selected: true } },
+        ]
+      });
+
+      let squareSetB = new SquareSet({
+        squares: [
+          { id: 2, x: 3, y: 4, piece: { selected: true } }
+        ]
+      });
+
+      let result = squareSetA.union(squareSetB);
       expect(result.squares.length).toEqual(2);
       expect(result.squares[0].id).toEqual(1);
       expect(result.squares[1].id).toEqual(2);
