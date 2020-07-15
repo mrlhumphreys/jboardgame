@@ -365,14 +365,16 @@ describe('grid', () => {
 
       let squareSetB = new SquareSet({
         squares: [
-          { id: 2, x: 3, y: 4, piece: { selected: true } }
+          { id: 2, x: 3, y: 4, piece: { selected: true } },
+          { id: 3, x: 4, y: 5, piece: { selected: true } }
         ]
       });
 
       let result = squareSetA.union(squareSetB);
-      expect(result.squares.length).toEqual(2);
+      expect(result.squares.length).toEqual(3);
       expect(result.squares[0].id).toEqual(1);
       expect(result.squares[1].id).toEqual(2);
+      expect(result.squares[2].id).toEqual(3);
     });
   });
 
