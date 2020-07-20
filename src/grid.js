@@ -345,6 +345,32 @@ export const atRange = function(square, distance) {
 };
 
 /**
+ * Find all squares a certain number of ranks away
+ * @param {Square} square - The origin square.
+ * @param {number} distance - The distance between squares.
+ * @return {Grid}
+ */
+export const ranksAway = function(square, distance) {
+  let _squares = this.squares.filter(function(s) {
+    return (new Vector(square, s)).absDy === distance;
+  });
+  return new this.constructor({squares: _squares});
+};
+
+/**
+ * Find all squares a certain number of files away
+ * @param {Square} square - The origin square.
+ * @param {number} distance - THe distance between squares.
+ * @return {Grid}
+ */
+export const filesAway = function(square, distance) {
+  let _squares = this.squares.filter(function(s) {
+    return (new Vector(square, s)).absDx === distance;
+  });
+  return new this.constructor({squares: _squares});
+};
+
+/**
  * Get squares that are in player's direction from square.
  * @param {Square} square - The origin square.
  * @param {number} playerNumber - The number of the player.

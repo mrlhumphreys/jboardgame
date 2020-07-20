@@ -30,6 +30,8 @@ import {
   oneSquareAwayFrom,
   inRange,
   atRange,
+  ranksAway,
+  filesAway,
   inDirection,
   orthogonal,
   diagonal,
@@ -111,6 +113,8 @@ class SquareSet {
     this.oneSquareAwayFrom = oneSquareAwayFrom;
     this.inRange = inRange;
     this.atRange = atRange;
+    this.ranksAway = ranksAway;
+    this.filesAway = filesAway;
     this.inDirection = inDirection;
     this.orthogonal = orthogonal;
     this.diagonal = diagonal;
@@ -756,6 +760,54 @@ describe('grid', () => {
       expect(result.squares.length).toEqual(2);
       expect(result.squares[0].id).toEqual(2);
       expect(result.squares[1].id).toEqual(6);
+    });
+  });
+
+  describe('ranksAway', () => {
+    it('must return squares at n ranks away', () => {
+      let squareSet = new SquareSet({
+        squares: [
+          { id: 1, x: 1, y: 1, piece: { selected: false, playerNumber: 2 } },
+          { id: 2, x: 2, y: 2, piece: null },
+          { id: 3, x: 3, y: 3, piece: null },
+          { id: 4, x: 4, y: 4, piece: { selected: false, playerNumber: 1 } },
+          { id: 5, x: 4, y: 5, piece: null },
+          { id: 6, x: 4, y: 6, piece: null },
+          { id: 6, x: 4, y: 7, piece: null },
+          { id: 7, x: 5, y: 4, piece: null },
+          { id: 8, x: 6, y: 4, piece: null }
+        ]
+      });
+      let origin = new Square({ id: 4, x: 4, y: 4, piece: { selected: false, playerNumber: 1 }});
+
+      let result = squareSet.ranksAway(origin, 2);
+      expect(result.squares.length).toEqual(2);
+      expect(result.squares[0].id).toEqual(2);
+      expect(result.squares[1].id).toEqual(6);
+    });
+  });
+
+  describe('filesAway', () => {
+    it('must return squares at n files away', () => {
+      let squareSet = new SquareSet({
+        squares: [
+          { id: 1, x: 1, y: 1, piece: { selected: false, playerNumber: 2 } },
+          { id: 2, x: 2, y: 2, piece: null },
+          { id: 3, x: 3, y: 3, piece: null },
+          { id: 4, x: 4, y: 4, piece: { selected: false, playerNumber: 1 } },
+          { id: 5, x: 4, y: 5, piece: null },
+          { id: 6, x: 4, y: 6, piece: null },
+          { id: 6, x: 4, y: 7, piece: null },
+          { id: 7, x: 5, y: 4, piece: null },
+          { id: 8, x: 6, y: 4, piece: null }
+        ]
+      });
+      let origin = new Square({ id: 4, x: 4, y: 4, piece: { selected: false, playerNumber: 1 }});
+
+      let result = squareSet.filesAway(origin, 2);
+      expect(result.squares.length).toEqual(2);
+      expect(result.squares[0].id).toEqual(2);
+      expect(result.squares[1].id).toEqual(8);
     });
   });
 
