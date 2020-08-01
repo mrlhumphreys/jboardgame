@@ -268,37 +268,146 @@ describe('square', () => {
   });
 
   describe('occupiedByPiece', () => {
-    it('returns true if occupied by that piece', () => {
-      let square = new Square({
-        id: 1,
-        x: 2,
-        y: 3,
-        piece: { id: 1, playerNumber: 2, type: 'pawn' } 
+    describe('with single string', () => {
+      it('returns true if occupied by that piece', () => {
+        let square = new Square({
+          id: 1,
+          x: 2,
+          y: 3,
+          piece: { id: 1, playerNumber: 2, type: 'pawn' } 
+        });
+
+        expect(square.occupiedByPiece('pawn')).toBe(true);
       });
 
-      expect(square.occupiedByPiece('pawn')).toBe(true);
+      it('returns false if not occupied by that piece', () => {
+        let square = new Square({
+          id: 1,
+          x: 2,
+          y: 3,
+          piece: { id: 1, playerNumber: 2, type: 'king' } 
+        });
+
+        expect(square.occupiedByPiece('pawn')).toBe(false);
+      });
+
+      it('returns false if not occupied', () => {
+        let square = new Square({
+          id: 1,
+          x: 2,
+          y: 3,
+          piece: null 
+        });
+
+        expect(square.occupiedByPiece('pawn')).toBe(false);
+      });
     });
 
-    it('returns false if not occupied by that piece', () => {
-      let square = new Square({
-        id: 1,
-        x: 2,
-        y: 3,
-        piece: { id: 1, playerNumber: 2, type: 'king' } 
+    describe('with array of strings', () => {
+      it('returns true if occupied by that piece', () => {
+        let square = new Square({
+          id: 1,
+          x: 2,
+          y: 3,
+          piece: { id: 1, playerNumber: 2, type: 'pawn' } 
+        });
+
+        expect(square.occupiedByPiece(['pawn', 'rook'])).toBe(true);
       });
 
-      expect(square.occupiedByPiece('pawn')).toBe(false);
+      it('returns false if not occupied by that piece', () => {
+        let square = new Square({
+          id: 1,
+          x: 2,
+          y: 3,
+          piece: { id: 1, playerNumber: 2, type: 'king' } 
+        });
+
+        expect(square.occupiedByPiece(['pawn','rook'])).toBe(false);
+      });
+
+      it('returns false if not occupied', () => {
+        let square = new Square({
+          id: 1,
+          x: 2,
+          y: 3,
+          piece: null 
+        });
+
+        expect(square.occupiedByPiece(['pawn','rook'])).toBe(false);
+      });
+    });
+  });
+
+  describe('notOccupiedByPiece', () => {
+    describe('with single string', () => {
+      it('returns true if not occupied by that piece', () => {
+        let square = new Square({
+          id: 1,
+          x: 2,
+          y: 3,
+          piece: { id: 1, playerNumber: 2, type: 'pawn' } 
+        });
+
+        expect(square.notOccupiedByPiece('rook')).toBe(true);
+      });
+
+      it('returns false if occupied by that piece', () => {
+        let square = new Square({
+          id: 1,
+          x: 2,
+          y: 3,
+          piece: { id: 1, playerNumber: 2, type: 'king' } 
+        });
+
+        expect(square.notOccupiedByPiece('king')).toBe(false);
+      });
+
+      it('returns false if not occupied', () => {
+        let square = new Square({
+          id: 1,
+          x: 2,
+          y: 3,
+          piece: null 
+        });
+
+        expect(square.notOccupiedByPiece('pawn')).toBe(false);
+      });
     });
 
-    it('returns false if not occupied', () => {
-      let square = new Square({
-        id: 1,
-        x: 2,
-        y: 3,
-        piece: null 
+    describe('with array of strings', () => {
+      it('returns true if not occupied by that piece', () => {
+        let square = new Square({
+          id: 1,
+          x: 2,
+          y: 3,
+          piece: { id: 1, playerNumber: 2, type: 'pawn' } 
+        });
+
+        expect(square.notOccupiedByPiece(['king', 'rook'])).toBe(true);
       });
 
-      expect(square.occupiedByPiece('pawn')).toBe(false);
+      it('returns false if occupied by that piece', () => {
+        let square = new Square({
+          id: 1,
+          x: 2,
+          y: 3,
+          piece: { id: 1, playerNumber: 2, type: 'king' } 
+        });
+
+        expect(square.notOccupiedByPiece(['king','rook'])).toBe(false);
+      });
+
+      it('returns false if not occupied', () => {
+        let square = new Square({
+          id: 1,
+          x: 2,
+          y: 3,
+          piece: null 
+        });
+
+        expect(square.notOccupiedByPiece(['pawn','rook'])).toBe(false);
+      });
     });
   });
 

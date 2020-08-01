@@ -1042,37 +1042,76 @@ describe('grid', () => {
   });
 
   describe('occupiedByPiece', () => {
-    it('returns pieces occupied by that piece type', () => {
-      let squareSet = new SquareSet({
-        squares: [
-          { id: 1, x: 2, y: 3, piece: { selected: false, playerNumber: 1, type: 'king' } },
-          { id: 2, x: 3, y: 4, piece: { selected: false, playerNumber: 1, type: 'pawn' } },
-          { id: 3, x: 4, y: 5, piece: { selected: false, playerNumber: 1, type: 'rook' } }
-        ]
+    describe('with string', () => {
+      it('returns pieces occupied by that piece type', () => {
+        let squareSet = new SquareSet({
+          squares: [
+            { id: 1, x: 2, y: 3, piece: { selected: false, playerNumber: 1, type: 'king' } },
+            { id: 2, x: 3, y: 4, piece: { selected: false, playerNumber: 1, type: 'pawn' } },
+            { id: 3, x: 4, y: 5, piece: { selected: false, playerNumber: 1, type: 'rook' } }
+          ]
+        });
+
+        let result = squareSet.occupiedByPiece('king');
+
+        expect(result.squares.length).toEqual(1);
+        expect(result.squares[0].piece.type).toEqual('king');
       });
+    });
 
-      let result = squareSet.occupiedByPiece('king');
+    describe('with array', () => {
+      it('returns pieces matching any of the types in the array', () => {
+        let squareSet = new SquareSet({
+          squares: [
+            { id: 1, x: 2, y: 3, piece: { selected: false, playerNumber: 1, type: 'king' } },
+            { id: 2, x: 3, y: 4, piece: { selected: false, playerNumber: 1, type: 'pawn' } },
+            { id: 3, x: 4, y: 5, piece: { selected: false, playerNumber: 1, type: 'rook' } }
+          ]
+        });
 
-      expect(result.squares.length).toEqual(1);
-      expect(result.squares[0].piece.type).toEqual('king');
+        let result = squareSet.occupiedByPiece(['king']);
+
+        expect(result.squares.length).toEqual(1);
+        expect(result.squares[0].piece.type).toEqual('king');
+      });
     });
   });
 
   describe('excludingPiece', () => {
-    it('returns squares occupied by without that piece', () => {
-      let squareSet = new SquareSet({
-        squares: [
-          { id: 1, x: 2, y: 3, piece: { selected: false, playerNumber: 1, type: 'king' } },
-          { id: 2, x: 3, y: 4, piece: { selected: false, playerNumber: 1, type: 'pawn' } },
-          { id: 3, x: 4, y: 5, piece: { selected: false, playerNumber: 1, type: 'rook' } }
-        ]
+    describe('with single string', () => {
+      it('returns squares occupied by without that piece', () => {
+        let squareSet = new SquareSet({
+          squares: [
+            { id: 1, x: 2, y: 3, piece: { selected: false, playerNumber: 1, type: 'king' } },
+            { id: 2, x: 3, y: 4, piece: { selected: false, playerNumber: 1, type: 'pawn' } },
+            { id: 3, x: 4, y: 5, piece: { selected: false, playerNumber: 1, type: 'rook' } }
+          ]
+        });
+
+        let result = squareSet.excludingPiece('king');
+
+        expect(result.squares.length).toEqual(2);
+        expect(result.squares[0].piece.type).toEqual('pawn');
+        expect(result.squares[1].piece.type).toEqual('rook');
       });
+    });
 
-      let result = squareSet.excludingPiece('king');
+    describe('with array of strings', () => {
+      it('returns squares occupied by without that piece', () => {
+        let squareSet = new SquareSet({
+          squares: [
+            { id: 1, x: 2, y: 3, piece: { selected: false, playerNumber: 1, type: 'king' } },
+            { id: 2, x: 3, y: 4, piece: { selected: false, playerNumber: 1, type: 'pawn' } },
+            { id: 3, x: 4, y: 5, piece: { selected: false, playerNumber: 1, type: 'rook' } }
+          ]
+        });
 
-      expect(result.squares.length).toEqual(2);
-      expect(result.squares[0].piece.type).toEqual('pawn');
-      expect(result.squares[1].piece.type).toEqual('rook');
+        let result = squareSet.excludingPiece(['king']);
+
+        expect(result.squares.length).toEqual(2);
+        expect(result.squares[0].piece.type).toEqual('pawn');
+        expect(result.squares[1].piece.type).toEqual('rook');
+      });
     });
   });
 

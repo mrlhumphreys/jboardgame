@@ -86,7 +86,11 @@ export const squareUnoccupiedOrOccupiedByOpponentOf = function(playerNumber) {
  * @return {boolean}
  */
 export const squareOccupiedByPiece = function(pieceType) {
-  return this.occupied() && this.piece.type === pieceType;
+  if (pieceType.constructor === Array) {
+    return this.occupied() && pieceType.includes(this.piece.type);
+  } else {
+    return this.occupied() && this.piece.type === pieceType;
+  }
 };
 
 /**
@@ -95,7 +99,11 @@ export const squareOccupiedByPiece = function(pieceType) {
  * @return {boolean}
  */
 export const squareNotOccupiedByPiece = function(pieceType) {
-  return this.occupied() && this.piece.type !== pieceType;
+  if (pieceType.constructor === Array) {
+    return this.occupied() && !pieceType.includes(this.piece.type);
+  } else {
+    return this.occupied() && this.piece.type !== pieceType;
+  }
 };
 
 /**
