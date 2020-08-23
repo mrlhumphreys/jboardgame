@@ -25,6 +25,8 @@ import {
   findById,
   findByCoordinate,
   findByPieceId,
+  whereX,
+  whereY,
   squaresAwayFrom,
   twoSquaresAwayFrom,
   oneSquareAwayFrom,
@@ -108,6 +110,8 @@ class SquareSet {
     this.findById = findById;
     this.findByCoordinate = findByCoordinate;
     this.findByPieceId = findByPieceId;
+    this.whereX = whereX;
+    this.whereY = whereY;
     this.squaresAwayFrom = squaresAwayFrom;
     this.twoSquaresAwayFrom = twoSquaresAwayFrom;
     this.oneSquareAwayFrom = oneSquareAwayFrom;
@@ -652,6 +656,38 @@ describe('grid', () => {
 
       let result = squareSet.findByPieceId(20);
       expect(result.id).toEqual(2);
+    });
+  });
+
+  describe('whereX', () => {
+    it('must return all squares with the matching x co-ordinate', () => {
+      let squareSet = new SquareSet({
+        squares: [
+          { id: 1, x: 2, y: 3, piece: { id: 10, playerNumber: 1 } },
+          { id: 2, x: 3, y: 4, piece: { id: 20, playerNumber: 1 } }
+        ]
+      });
+
+      let result = squareSet.whereX(3);
+
+      expect(result.length()).toEqual(1);
+      expect(result.squares[0].id).toEqual(2);
+    });
+  });
+
+  describe('whereY', () => {
+    it('must return all squares with the matching y co-ordinate', () => {
+      let squareSet = new SquareSet({
+        squares: [
+          { id: 1, x: 2, y: 3, piece: { id: 10, playerNumber: 1 } },
+          { id: 2, x: 3, y: 4, piece: { id: 20, playerNumber: 1 } }
+        ]
+      });
+
+      let result = squareSet.whereY(3);
+
+      expect(result.length()).toEqual(1);
+      expect(result.squares[0].id).toEqual(1);
     });
   });
 

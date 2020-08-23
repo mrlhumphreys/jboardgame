@@ -288,6 +288,26 @@ export const findByPieceId = function(pieceId) {
 // filters
 
 /**
+ * Get squares that have x co-ordinate.
+ * @param {number} x - The x co-ordinate.
+ * @return {Grid}
+ */
+export const whereX = function(x) {
+  let _squares = this.squares.filter((s) => { return s.x === x; });
+  return new this.constructor({squares: _squares});
+};
+
+/**
+ * Get squares that have y co-ordinate.
+ * @param {number} y - The y co-ordinate.
+ * @return {Grid}
+ */
+export const whereY = function(y) {
+  let _squares = this.squares.filter((s) => { return s.y === y; });
+  return new this.constructor({squares: _squares});
+};
+
+/**
  * Get squares that are n squares away from a square.
  * @param {number} number - The distance between squares.
  * @param {Square} from - The origin square.
