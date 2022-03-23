@@ -73,6 +73,10 @@ import {
   removePiece
 } from './square'
 
+import Vector from './vector'
+import Direction from './direction'
+import Point from './point'
+
 export { 
   buildPlayers, 
   buildLastAction, 
@@ -141,5 +145,9 @@ export {
   select,
   deselect,
   addPiece,
-  removePiece
+  removePiece,
+
+  Vector,
+  Direction,
+  Point
 };
