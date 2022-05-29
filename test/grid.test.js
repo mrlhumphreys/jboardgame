@@ -16,6 +16,7 @@ import {
   difference,
   intersection,
   uniq,
+  where,
   length,
   includes,
   excludes,
@@ -54,6 +55,7 @@ import {
 import {
   squareAsJson,
   squareDup,
+  attributeMatch,
   point,
   squareOccupied,
   squareUnoccupied,
@@ -73,6 +75,7 @@ class Square {
 
     this.asJson = squareAsJson;
     this.dup = squareDup;
+    this.attributeMatch = attributeMatch;
     this.point = point;
     this.occupied = squareOccupied;
     this.unoccupied = squareUnoccupied;
@@ -101,6 +104,7 @@ class SquareSet {
     this.difference = difference;
     this.intersection = intersection;
     this.uniq = uniq;
+    this.where = where;
     this.length = length;
     this.includes = includes;
     this.excludes = excludes;
@@ -444,6 +448,21 @@ describe('grid', () => {
       expect(result.squares.length).toEqual(2);
       expect(result.squares[0].id).toEqual(1);
       expect(result.squares[1].id).toEqual(2);
+    });
+  });
+
+  describe('where', () => {
+    it('must return squares matching attribute', function() {
+      let squareSet = new SquareSet({
+        squares: [
+          { id: 1, x: 2, y: 3, piece: { selected: false } },
+          { id: 2, x: 3, y: 4, piece: { selected: true } },
+        ]
+      });
+
+      let result = squareSet.where({x: 2});
+      expect(result.squares.length).toEqual(1);
+      expect(result.squares[0].x).toEqual(2);
     });
   });
 

@@ -38,6 +38,30 @@ export const squareDup = function() {
 };
 
 /**
+ * Does the square's attribute match the value?
+ * @return {boolean}
+ */
+export const attributeMatch = function(attribute, value) {
+  const objMatcher = function(obj, k, v) {
+    let value = obj[k];
+    if (v.constructor === Object && exists(value)) {
+      return Object.keys(v).every(function(k2) {
+        let v2 = v[k2];
+        return objMatcher(value, k2, v2);
+      });
+    } else if (v.constructor === Array && value.constructor !== Array) {
+      return v.includes(value);
+    } else if (v.constructor === Function) {
+      return v(value);
+    } else {
+      return value === v;
+    }
+  };
+
+  return objMatcher(this, attribute, value);
+};
+
+/**
  * Is the square occupied?
  * @return {boolean}
  */

@@ -4,6 +4,7 @@ import { exists } from '../src/utils'
 import {
   squareAsJson,
   squareDup,
+  attributeMatch,
   squareOccupied,
   squareUnoccupied,
   squareOccupiedByPlayer,
@@ -27,6 +28,7 @@ class Square {
 
     this.asJson = squareAsJson;
     this.dup = squareDup;
+    this.attributeMatch = attributeMatch;
     this.occupied = squareOccupied;
     this.unoccupied = squareUnoccupied;
     this.occupiedByPlayer = squareOccupiedByPlayer;
@@ -111,6 +113,120 @@ describe('square', () => {
       expect(result.x).toEqual(2);
       expect(result.y).toEqual(3);
       expect(result.piece).toEqual({ id: 1, player_number: 2, type: 'pawn'});
+    });
+  });
+
+  describe('attributeMatch', () => {
+    describe('deep match', () => {
+      it('returns true if value matches deep attribute', () => {
+        let square = new Square({
+          id: 1,
+          x: 2,
+          y: 3,
+          piece: { id: 1, player_number: 2, type: 'pawn' }
+        });
+
+        let result = square.attributeMatch('piece', { player_number: 2 });
+
+        expect(result).toBe(true);
+      });
+
+      it('returns false if value does not match deep attribute', () => {
+        let square = new Square({
+          id: 1,
+          x: 2,
+          y: 3,
+          piece: { id: 1, player_number: 2, type: 'pawn' }
+        });
+
+        let result = square.attributeMatch('piece', { player_number: 1 });
+
+        expect(result).toBe(false);
+      });
+    });
+
+    describe('in array match', () => {
+      it('returns true if value in array', () => {
+        let square = new Square({
+          id: 1,
+          x: 2,
+          y: 3,
+          piece: { id: 1, player_number: 2, type: 'pawn' }
+        });
+
+        let result = square.attributeMatch('x', [2,3]);
+
+        expect(result).toBe(true);
+      });
+
+      it('returns false if value not in array', () => {
+        let square = new Square({
+          id: 1,
+          x: 2,
+          y: 3,
+          piece: { id: 1, player_number: 2, type: 'pawn' }
+        });
+
+        let result = square.attributeMatch('x', [4,5]);
+
+        expect(result).toBe(false);
+      });
+    });
+
+    describe('function match', () => {
+      it('returns true if function returns true', () => {
+        let square = new Square({
+          id: 1,
+          x: 2,
+          y: 3,
+          piece: { id: 1, player_number: 2, type: 'pawn' }
+        });
+
+        let result = square.attributeMatch('x', (x) => { return x === 2; });
+
+        expect(result).toBe(true);
+      });
+
+      it('returns false if function returns false', () => {
+        let square = new Square({
+          id: 1,
+          x: 2,
+          y: 3,
+          piece: { id: 1, player_number: 2, type: 'pawn' }
+        });
+
+        let result = square.attributeMatch('x', (x) => { return x === 5; });
+
+        expect(result).toBe(false);
+      });
+    });
+
+    describe('value match', () => {
+      it('returns true if values are equal', () => {
+        let square = new Square({
+          id: 1,
+          x: 2,
+          y: 3,
+          piece: { id: 1, player_number: 2, type: 'pawn' }
+        });
+
+        let result = square.attributeMatch('x', 2);
+
+        expect(result).toBe(true);
+      });
+
+      it('returns false if values are not equal', () => {
+        let square = new Square({
+          id: 1,
+          x: 2,
+          y: 3,
+          piece: { id: 1, player_number: 2, type: 'pawn' }
+        });
+
+        let result = square.attributeMatch('x', 5);
+
+        expect(result).toBe(false);
+      });
     });
   });
 

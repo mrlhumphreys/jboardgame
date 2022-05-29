@@ -175,6 +175,23 @@ export const uniq = function() {
 }
 
 /**
+ * Filter the squares with an object of attributes and matching values
+ *
+ * @param {Object} object
+ *   attributes to query for
+ * @return {Grid}
+ */
+export const where = function(object) {
+  let _squares = Object.keys(object).reduce(function(memo, attribute) {
+    return memo.filter(function(s) {
+      return s.attributeMatch(attribute, object[attribute]);
+    });
+  }, this.squares);
+
+  return new this.constructor({squares: _squares});
+}
+
+/**
  * Get the length of squares in the grid.
  * @return {number}
  */
