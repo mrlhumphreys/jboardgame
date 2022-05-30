@@ -408,6 +408,30 @@ export const filesAway = function(square, distance) {
 };
 
 /**
+ * Find all squares in the same rank 
+ * @param {Square} square - The origin square.
+ * @return {Grid}
+ */
+export const sameRank = function(square) {
+  let _squares = this.squares.filter(function(s) {
+    return s.y === square.y;
+  });
+  return new this.constructor({squares: _squares});
+};
+
+/**
+ * Find all squares in the same file 
+ * @param {Square} square - The origin square.
+ * @return {Grid}
+ */
+export const sameFile = function(square) {
+  let _squares = this.squares.filter(function(s) {
+    return s.x === square.x;
+  });
+  return new this.constructor({squares: _squares});
+};
+
+/**
  * Get squares that are in player's direction from square.
  * @param {Square} square - The origin square.
  * @param {number} playerNumber - The number of the player.

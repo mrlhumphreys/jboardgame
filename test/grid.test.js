@@ -35,6 +35,8 @@ import {
   atRange,
   ranksAway,
   filesAway,
+  sameRank,
+  sameFile,
   inDirection,
   orthogonal,
   diagonal,
@@ -123,6 +125,8 @@ class SquareSet {
     this.atRange = atRange;
     this.ranksAway = ranksAway;
     this.filesAway = filesAway;
+    this.sameRank = sameRank;
+    this.sameFile = sameFile;
     this.inDirection = inDirection;
     this.orthogonal = orthogonal;
     this.diagonal = diagonal;
@@ -863,6 +867,44 @@ describe('grid', () => {
       expect(result.squares.length).toEqual(2);
       expect(result.squares[0].id).toEqual(2);
       expect(result.squares[1].id).toEqual(8);
+    });
+  });
+
+  describe('sameRank', () => {
+    it('returns squares with the same y co-ordinate', function() {
+      let squareSet = new SquareSet({
+        squares: [
+          { id: 1, x: 1, y: 1, piece: null },
+          { id: 2, x: 2, y: 1, piece: null },
+          { id: 3, x: 2, y: 2, piece: null }
+        ]
+      });
+
+      let origin = new Square({ id: 2, x: 2, y: 1, piece: null});
+
+      let result = squareSet.sameRank(origin);
+      expect(result.squares.length).toEqual(2);
+      expect(result.squares[0].y).toEqual(1);
+      expect(result.squares[1].y).toEqual(1);
+    });
+  });
+
+  describe('sameFile', () => {
+    it('returns squares with the same x co-ordinate', function() {
+      let squareSet = new SquareSet({
+        squares: [
+          { id: 1, x: 1, y: 1, piece: null },
+          { id: 2, x: 2, y: 1, piece: null },
+          { id: 3, x: 2, y: 2, piece: null }
+        ]
+      });
+
+      let origin = new Square({ id: 2, x: 2, y: 1, piece: null});
+
+      let result = squareSet.sameFile(origin);
+      expect(result.squares.length).toEqual(2);
+      expect(result.squares[0].x).toEqual(2);
+      expect(result.squares[1].x).toEqual(2);
     });
   });
 
